@@ -75,7 +75,8 @@ def release_page():
 def render(id):
     form = RentAdd()
     rentType_list = get_All_rentType()
-    rentType_list = [(r["id"], r["type"]+" $"+str(r["price"]) +" Yr: "+ str(r["period_from"].year) +'/'+str(r["period_from"].month) + "to" + str(r["period_to"].year) +'/'+ str(r["period_to"].month)) for r in rentType_list]
+    if rentType_list:
+        rentType_list = [(r["id"], r["type"]+" $"+str(r["price"]) +" Yr: "+ str(r["period_from"].year) +'/'+str(r["period_from"].month) + "to" + str(r["period_to"].year) +'/'+ str(r["period_to"].month)) for r in rentType_list]
     form.rent_type.choices =  rentType_list
     return render_template('addrent.html', form=form, id = id)
 
