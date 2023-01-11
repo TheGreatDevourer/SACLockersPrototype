@@ -134,3 +134,6 @@ def get_All_rentType():
         return None
         
     return [r.toJSON() for r in rentType]
+
+def get_rt_Type():
+    return [rt.value for rt in Types]

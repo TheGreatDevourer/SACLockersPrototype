@@ -12,6 +12,8 @@ from controllers.lockers import(
     release_locker
 )
 
+from controllers.transactionLog import cal_transaction_amount
+
 from datetime import datetime,timedelta
 from database import db 
 from sqlalchemy.exc import SQLAlchemyError
@@ -61,6 +63,7 @@ def recal_amount_owed(rentType_id,date_returned,rent_date_from,rent_date_to):
         timestamp = datetime.now()
         if timestamp > rent_date_to:
            return init_amount_owed(rentType_id,rent_date_from,rent_date_to) + late_fees(rentType_id,timestamp,rent_date_from,rent_date_to)
+        return init_amount_owed(rentType_id,rent_date_from,rent_date_to)
 
 def late_fees(rentType_id, date_returned, rent_date_from, rent_date_to):
     type = get_rentType_by_id(rentType_id)
@@ -126,7 +129,7 @@ def update_rent(id):
         return None
     amt = recal_amount_owed(rent.rent_type,rent.date_returned,rent.rent_date_from,rent.rent_date_to)
     if amt is not None:
-        rent.amount_owed = amt - rent.cal_transactions()
+        rent.amount_owed = amt - cal_transaction_amount(id)
     rent.status = rent.check_status()
 
     try:
