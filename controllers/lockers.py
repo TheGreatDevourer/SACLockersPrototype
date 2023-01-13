@@ -5,6 +5,8 @@ from sqlalchemy import or_
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from flask import flash
+
+
 def add_new_locker(locker_code,locker_type,status,key):
     try:
         locker = Locker(locker_code,locker_type,status,key)
