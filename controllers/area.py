@@ -2,7 +2,7 @@ from models import Area
 from database import db
 from flask import flash
 from sqlalchemy.exc import SQLAlchemyError
-
+from controllers.log import create_log
 
 def add_new_area(locker_id, description, longitude, latitude):
     try:
@@ -11,7 +11,7 @@ def add_new_area(locker_id, description, longitude, latitude):
         db.session.commit()
         return new_area
     except SQLAlchemyError as e:
-        
+        create_log(locker_id,type(e),datetime.now())
         flash("Unable to add new Area. Check Error Log for more Details")
         db.session.rollback()
         return None
