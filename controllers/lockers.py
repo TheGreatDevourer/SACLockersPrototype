@@ -15,8 +15,6 @@ def add_new_locker(locker_code,locker_type,status,key):
         return locker
     except SQLAlchemyError as e:
         db.session.rollback()
-        create_log(locker_code, type(e), datetime.now())
-        flash("Unable to add Locker. Check Error Log for more Details")
         return []
 
 def get_lockers_available():
