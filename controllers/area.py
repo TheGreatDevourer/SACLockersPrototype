@@ -3,6 +3,7 @@ from database import db
 from flask import flash
 from sqlalchemy.exc import SQLAlchemyError
 
+
 def add_new_area(locker_id, description, longitude, latitude):
     try:
         new_area = Area(locker_id,description,longitude, latitude)

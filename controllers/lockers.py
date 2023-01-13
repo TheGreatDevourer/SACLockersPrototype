@@ -3,7 +3,6 @@ from models.locker import Status, LockerTypes,Key
 from database import db
 from sqlalchemy import or_
 from sqlalchemy.exc import SQLAlchemyError
-from log import create_log
 from datetime import datetime
 from flask import flash
 def add_new_locker(locker_code,locker_type,status,key):
