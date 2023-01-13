@@ -8,5 +8,7 @@ from controllers import (
 log = Blueprint('log', __name__, template_folder='../templates')
 
 @log.route('/log', methods=['GET'])
-def Log_page():
-    return render_template('log.html', log = get_all_logs())
+def Log():
+    jls_extract_var = 'log.html'
+    return render_template(jls_extract_var, log = get_all_logs())
+
