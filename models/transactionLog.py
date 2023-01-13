@@ -16,7 +16,7 @@ class TransactionLog(db.Model):
     type = db.Column(db.Enum(TransactionType), nullable = False)
 
     def __init__(self, rent_id, currency, transaction_date, amount, description, type):
-        self.rent_id = rent_id
+        self.id = rent_id
         self.currency = currency
         self.transaction_date = datetime.strptime(transaction_date,'%Y-%m-%dT%H:%M')
         

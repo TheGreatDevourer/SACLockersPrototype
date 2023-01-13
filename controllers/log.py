@@ -1,5 +1,5 @@
 from models import Log
-
+from flask import flash
 from datetime import datetime
 from database import db 
 from sqlalchemy.exc import SQLAlchemyError
@@ -11,7 +11,8 @@ def create_log(id, message,timestamp):
         db.session.commit(log)
         return log
     except SQLAlchemyError as e:
-        print(e)
+        create_log(id, type(e), datetime.now())
+        flash("Unable to log event. Check Error Log for more Details")
         db.session.rollback()   
         return None
 

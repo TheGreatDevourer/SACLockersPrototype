@@ -3,9 +3,11 @@ from controllers.lockers import rent_locker,get_locker_id,release_locker
 from datetime import datetime
 from database import db 
 from sqlalchemy.exc import SQLAlchemyError
+from flask import flash
 
 def create_rent(student_id, locker_id,rentType, rent_date_from, rent_date_to):
     if get_overdue_rent_by_student(student_id) or get_owed_rent_by_student(student_id):
+        flash("Unable to create rent. Rent Owed")
         return []
 
     if get_locker_id(locker_id): 
@@ -17,7 +19,8 @@ def create_rent(student_id, locker_id,rentType, rent_date_from, rent_date_to):
             
             return rent
         except SQLAlchemyError as e:
-            print(e)
+            create_log(student_id, type(e), datetime.now())
+            flash("Unable to create rent. Check Error Log for more Details")
             db.session.rollback()   
             return None
         
@@ -25,7 +28,7 @@ def create_rent(student_id, locker_id,rentType, rent_date_from, rent_date_to):
 
 def get_rent_by_id(id):
     rent = Rent.query.filter_by(id=id).first()
-
+    flash("Rent does not exist")
     if not rent:
         return None
    
@@ -35,6 +38,7 @@ def update_rent(id):
     rent = get_rent_by_id(id)
 
     if not rent:
+        
         return None
     
     rent.amount_owed = rent.cal_amount_owed()
@@ -45,7 +49,9 @@ def update_rent(id):
         db.session.commit()
         return rent
 
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
+        create_log(id, type(e), datetime.now())
+        flash("Unable to update rent. Check Error Log for more Details")
         db.session.rollback()
         return None
 
@@ -76,7 +82,9 @@ def release_rental(id,d_returned):
         release_locker(rent.locker_id)
         return rent
 
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
+        create_log(id, type(e), datetime.now())
+        flash("Unable to release Rental. Check Error Log for more Details")
         db.session.rollback()
         return None
 

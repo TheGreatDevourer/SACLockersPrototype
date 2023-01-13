@@ -1,9 +1,9 @@
 from database import db
 
 class Log (db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, nullable= False,)
     message = db.Column(db.String, nullable=False)
-    timestamp =  db.Column(db.DateTime, nullable= False)
+    timestamp =  db.Column(db.DateTime, primary_key = True)
 
 
     def __init__(self, id, message,timestamp):

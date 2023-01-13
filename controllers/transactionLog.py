@@ -2,6 +2,7 @@ from database import db
 from models import TransactionLog
 from models.transactionLog import TransactionType
 from sqlalchemy.exc import SQLAlchemyError
+from flask import flash
 
 def add_new_transaction(rent_id, currency, transaction_date, amount, description, t_type):
     try:
@@ -9,8 +10,9 @@ def add_new_transaction(rent_id, currency, transaction_date, amount, description
         db.session.add(new_transaction)
         db.session.commit()
         return new_transaction
-    except SQLAlchemyError as e:
-        print(e)
+    except SQLAlchemyError  as e:
+        create_log(s_id, type(e), datetime.now())
+        flash("Unable to Add new Transaction.Check Error Log for more Details")
         db.session.rollback()
         return []
 
@@ -18,6 +20,7 @@ def get_transaction_id(id):
     transaction = TransactionLog.query.filter_by(id = id)
 
     if not transaction:
+        flash("Transaction does not exist")
         return []
     return transaction
 
