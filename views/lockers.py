@@ -44,8 +44,6 @@ def add_locker():
         data = request.form # get data from form submission
         new_locker = add_new_locker(locker_code=data['locker_code'], locker_type=data['locker_type'], status=data['status'], key=data['key'])
         if not new_locker:
-            create_log(locker_code, type(e), datetime.now())
-            flash("Unable to add Locker. Check Error Log for more Details")
             return redirect(url_for('locker_views.index'))
             #jsonify({"message":"Locker already exist or some error has occurred"}),400
        

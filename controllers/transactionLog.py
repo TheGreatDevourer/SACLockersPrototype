@@ -11,7 +11,7 @@ def add_new_transaction(rent_id, currency, transaction_date, amount, description
         db.session.commit()
         return new_transaction
     except SQLAlchemyError  as e:
-        create_log(s_id, type(e), datetime.now())
+
         flash("Unable to Add new Transaction.Check Error Log for more Details")
         db.session.rollback()
         return []
