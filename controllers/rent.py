@@ -19,7 +19,7 @@ def create_rent(student_id, locker_id,rentType, rent_date_from, rent_date_to):
             
             return rent
         except SQLAlchemyError as e:
-            create_log(student_id, type(e), datetime.now())
+
             flash("Unable to create rent. Check Error Log for more Details")
             db.session.rollback()   
             return None
@@ -50,7 +50,7 @@ def update_rent(id):
         return rent
 
     except SQLAlchemyError as e:
-        create_log(id, type(e), datetime.now())
+
         flash("Unable to update rent. Check Error Log for more Details")
         db.session.rollback()
         return None
@@ -83,7 +83,7 @@ def release_rental(id,d_returned):
         return rent
 
     except SQLAlchemyError as e:
-        create_log(id, type(e), datetime.now())
+
         flash("Unable to release Rental. Check Error Log for more Details")
         db.session.rollback()
         return None

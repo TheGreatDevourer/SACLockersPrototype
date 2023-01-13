@@ -11,7 +11,8 @@ from controllers import (
     delete_locker,
     update_key,
     update_locker_type,
-    update_locker_status
+    update_locker_status,
+    create_log
 )
 
 locker_views = Blueprint('locker_views', __name__, template_folder='../templates')
