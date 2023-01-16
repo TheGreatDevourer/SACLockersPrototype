@@ -8,16 +8,21 @@ from flask import flash
 from controllers.log import create_log
 
 def add_new_locker(locker_code,locker_type,status,key):
-    try:
-        locker = Locker(locker_code,locker_type,status,key)
-        db.session.add(locker)
-        db.session.commit()
-        return locker
-    except SQLAlchemyError as e:
-        create_log(locker_code,type(e),datetime.now())
-        flash("Unable to Add new Area. Check Error Log for more Details")
-        db.session.rollback()
-        return []
+    new_code=get_locker_id(locker_code)
+    if not new_code:
+        try:
+            locker = Locker(locker_code,locker_type,status,key)
+            db.session.add(locker)
+            db.session.commit()
+            return locker
+        except SQLAlchemyError as e:
+            create_log(locker_code,type(e),datetime.now())
+            flash("Unable to Add new Area. Check Error Log for more Details")
+            db.session.rollback()
+            return []
+    create_log(locker_code,"Locker Already Exists",datetime.now())
+    flash("Unable to Add new Area. Check Error Log for more Details")
+    return []
 
 def get_lockers_available():
     locker_list = Locker.query.filter_by(status = Status.FREE).all()
