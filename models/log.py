@@ -1,5 +1,5 @@
 from database import db
-
+from datetime import datetime
 class Log (db.Model):
     id = db.Column(db.Integer, nullable= False,)
     message = db.Column(db.String, nullable=False)
