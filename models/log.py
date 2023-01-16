@@ -9,7 +9,7 @@ class Log (db.Model):
     def __init__(self, id, message,timestamp):
         self.id = id
         self.message = message
-        self.timestamp =  datetime.strptime(timestamp,'%d-%m-%y %H:%M:%S.%f')
+        self.timestamp =  datetime.strptime(timestamp,'%y-%m-%d %H:%M:%S.%f')
         
             
     def toJSON(self):
