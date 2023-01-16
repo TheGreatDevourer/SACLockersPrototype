@@ -5,7 +5,7 @@ from sqlalchemy import or_
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from flask import flash
-
+from controllers.log import create_log
 
 def add_new_locker(locker_code,locker_type,status,key):
     try:
@@ -14,6 +14,7 @@ def add_new_locker(locker_code,locker_type,status,key):
         db.session.commit()
         return locker
     except SQLAlchemyError as e:
+        create_log(locker_code,type(e),datetime.now())
         flash("Unable to Add new Area. Check Error Log for more Details")
         db.session.rollback()
         return []
