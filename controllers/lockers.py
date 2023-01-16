@@ -14,7 +14,7 @@ def add_new_locker(locker_code,locker_type,status,key):
         db.session.commit()
         return locker
     except SQLAlchemyError as e:
-        create_log(locker_code,type(e),str(datetime.now()))
+        create_log(locker_code,type(e),datetime.now())
         flash("Unable to Add new Area. Check Error Log for more Details")
         db.session.rollback()
         return []
