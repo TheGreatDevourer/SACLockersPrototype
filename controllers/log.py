@@ -8,7 +8,7 @@ def create_log(id, message,timestamp):
     try:
         log = Log(id, message,timestamp)
         db.session.add(log)
-        db.session.commit(log)
+        db.session.commit()
         return log
     except SQLAlchemyError as e:
         create_log(id, type(e), datetime.now())

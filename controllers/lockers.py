@@ -5,18 +5,24 @@ from sqlalchemy import or_
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 from flask import flash
-
+from controllers.log import create_log
 
 def add_new_locker(locker_code,locker_type,status,key):
-    try:
-        locker = Locker(locker_code,locker_type,status,key)
-        db.session.add(locker)
-        db.session.commit()
-        return locker
-    except SQLAlchemyError as e:
-        flash("Unable to Add new Area. Check Error Log for more Details")
-        db.session.rollback()
-        return []
+    new_code=get_locker_id(locker_code)
+    if not new_code:
+        try:
+            locker = Locker(locker_code,locker_type,status,key)
+            db.session.add(locker)
+            db.session.commit()
+            return locker
+        except SQLAlchemyError as e:
+            create_log(locker_code,type(e),datetime.now())
+            flash("Unable to Add new Area. Check Error Log for more Details")
+            db.session.rollback()
+            return []
+    create_log(locker_code,"Locker Already Exists",datetime.now())
+    flash("Unable to Add new Area. Check Error Log for more Details")
+    return []
 
 def get_lockers_available():
     locker_list = Locker.query.filter_by(status = Status.FREE).all()
@@ -47,7 +53,7 @@ def rent_locker(id):
         db.session.commit()
         return True
     except SQLAlchemyError as e:
-        
+        create_log(id,type(e),datetime.now())
         flash("Unable to Rent Locker. Check Error Log for more Details")
         db.session.rollback()
         return None
@@ -66,7 +72,7 @@ def release_locker(id):
         
         return locker
     except SQLAlchemyError as e:
-    
+        create_log(id,type(e),datetime.now())
         flash("Unable to rent Locker. Check Error Log for more Details")
         db.session.rollback()
         return None
@@ -80,7 +86,7 @@ def delete_locker(id):
         db.session.commit()
         return locker
     except SQLAlchemyError as e:
-
+        create_log(id,type(e),datetime.now())
         flash("Unable to delete Locker. Check Error Log for more Details")
         db.session.rollback()
         return None
@@ -97,7 +103,7 @@ def update_key(id, new_key):
             db.session.commit()
             return locker
     except SQLAlchemyError as e:
-
+        create_log(id,type(e),datetime.now())
         flash("Unable to update key. Check Error Log for more Details")
         db.session.rollback()
         return None
@@ -114,7 +120,7 @@ def update_locker_status(id, new_status):
             db.session.commit()
             return locker
     except SQLAlchemyError as e:
-
+        create_log(id,type(e),datetime.now())
         flash("Unable to update locker status. Check Error Log for more Details")
         db.session.rollback()
         return None
@@ -131,7 +137,7 @@ def update_locker_type(id, new_type):
             db.session.commit()
             return locker
     except SQLAlchemyError as e:
-
+        create_log(id,type(e),datetime.now())
         flash("Unable to update locker type. Check Error Log for more Details")
         db.session.rollback()
         return None
