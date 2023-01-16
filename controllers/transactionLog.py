@@ -3,7 +3,8 @@ from models import TransactionLog
 from models.transactionLog import TransactionType
 from sqlalchemy.exc import SQLAlchemyError
 from flask import flash
-
+from datetime import datetime
+from controllers.log import create_log
 def add_new_transaction(rent_id, currency, transaction_date, amount, description, t_type):
     try:
         new_transaction = TransactionLog(rent_id, currency,transaction_date, amount, description, t_type)
@@ -11,7 +12,7 @@ def add_new_transaction(rent_id, currency, transaction_date, amount, description
         db.session.commit()
         return new_transaction
     except SQLAlchemyError  as e:
-
+        create_log(id,type(e),datetime.now())
         flash("Unable to Add new Transaction.Check Error Log for more Details")
         db.session.rollback()
         return []
