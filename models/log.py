@@ -14,7 +14,7 @@ class Log (db.Model):
             
     def toJSON(self):
         return {
-            'id': self.locker_code,
+            'id': self.id,
             'message':self.message,
             'timestamp': self.timestamp,
         }
